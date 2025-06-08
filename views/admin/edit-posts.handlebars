@@ -1,0 +1,159 @@
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Edit Post</h1>
+    <p class="mb-4">Update the post details below.</p>
+
+    <!-- Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Post Details</h6>
+        </div>
+        <div class="card-body">
+            <form action="/admin/posts/edit-posts/{{post.slug}}" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" value="{{post.title}}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <select class="form-control" id="author" name="author" required>
+                        {{#each authors}}
+                            <option value="{{this._id}}" {{#if_eq this._id ../post.author._id}}selected{{/if_eq}}>{{this.firstName}} {{this.lastName}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select class="form-control" id="category" name="category" required>
+                        {{#each categories}}
+                            <option value="{{this._id}}" {{#if_eq this._id ../post.category._id}}selected{{/if_eq}}>{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select class="form-control" id="status" name="status">
+                        <option value="draft" {{#if_eq post.status 'draft'}}selected{{/if_eq}}>Draft</option>
+                        <option value="published" {{#if_eq post.status 'published'}}selected{{/if_eq}}>Published</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea class="form-control" id="content" name="content" rows="10" required>{{post.content}}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="thumbnail">Thumbnail</label>
+                    {{#if post.thumbnail}}
+                        <div>
+                            <img src="/uploads/{{post.thumbnail}}" alt="Current Thumbnail" style="max-width: 200px; margin-bottom: 10px;">
+                            <p>Current Thumbnail: {{post.thumbnail}}</p>
+                        </div>
+                    {{/if}}
+                    <input type="file" class="form-control-file" id="thumbnail" name="thumbnail" accept="image/*">
+                </div>
+
+                <div class="form-group">
+                    <label for="tags">Tags (comma-separated)</label>
+                    <input type="text" class="form-control" id="tags" name="tags" value="{{post.tags}}">
+                </div>
+
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="allowComments" name="allowComments" {{#if post.allowComments}}checked{{/if}}>
+                    <label class="form-check-label" for="allowComments">Allow Comments</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Update Post</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Handlebars helper for comparison -->
+<script>
+Handlebars.registerHelper('if_eq', function(a, b, opts) {
+    if (a == b) {
+        return opts.fn(this);
+    } else {
+        return opts.inverse(this);
+    }
+});
+</script>
+<script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#content-editor'), {
+            toolbar: [
+                'heading', '|',
+                'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+                'outdent', 'indent', '|',
+                'blockQuote', 'insertTable', 'mediaEmbed', 'undo', 'redo', '|',
+                'fontSize', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
+                'alignment', 'code', 'codeBlock'
+            ],
+            heading: {
+                options: [
+                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                    { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                    { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                    { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
+                ]
+            }
+        })
+        .then(editor => {
+            editor.model.document.on('change:data', () => {
+                document.querySelector('#content').value = editor.getData();
+            });
+        })
+        .catch(error => {
+            console.error('Editor initialization failed:', error);
+        });
+</script>
+<style>
+    /* Custom styles for the reply form */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-control {
+        border-radius: 0.35rem;
+    }
+
+    .btn-primary {
+        border-radius: 0.35rem;
+        padding: 0.75rem 1.25rem;
+    }
+
+    /* Style for CKEditor to match SB Admin 2 */
+    .ck-editor__editable {
+        min-height: 200px;
+        border-radius: 0.35rem;
+        border: 1px solid #d1d3e2;
+        padding: 15px;
+        font-family: 'Nunito', sans-serif;
+        color: #858796;
+        background-color: #fff;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    }
+
+    .ck-editor__editable:focus {
+        border-color: #4e73df;
+        box-shadow: 0 0 0 0.2rem rgba(78, 105, 223, 0.25);
+    }
+
+    .ck-toolbar {
+        border-radius: 0.35rem 0.35rem 0 0;
+        background-color: #f8f9fc;
+        border: 1px solid #d1d3e2;
+    }
+
+    /* Style for read-only comment and post sections */
+    .card.bg-light p {
+        margin: 0;
+        color: #858796;
+    }
+</style>

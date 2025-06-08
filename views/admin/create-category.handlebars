@@ -1,0 +1,51 @@
+<div id="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <h1 class="h3 mb-4 text-gray-800">Create New Category</h1>
+        <!-- Category Form -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Category Details</h6>
+            </div>
+            <div class="card-body">
+                <form action="/admin/category/create-category" method="POST">
+                    <!-- Name -->
+                    <div class="form-group">
+                        <label for="name">Category Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <!-- Created By -->
+                    <div class="form-group">
+                        <label for="createdBy">Created By</label>
+                        <select class="form-control" id="createdBy" name="createdBy" required>
+                            <option value="" disabled selected>Select User</option>
+                            {{#each users}}
+                                <option value="{{this._id}}">{{this.firstName}} {{this.lastName}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Category
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- End of Main Content -->
+
+<style>
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    .form-control {
+        border-radius: 0.35rem;
+    }
+    .btn-primary {
+        border-radius: 0.35rem;
+        padding: 0.75rem 1.25rem;
+    }
+</style>

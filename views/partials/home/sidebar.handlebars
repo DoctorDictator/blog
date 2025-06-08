@@ -1,0 +1,147 @@
+<div class="col-lg-4">
+  <!-- Search Widget -->
+  <div class="card mb-4">
+    <div class="card-header">Search</div>
+    <div class="card-body">
+      <form action="/search" method="GET">
+        <div class="input-group">
+          <input
+            class="form-control"
+            type="text"
+            name="q"
+            placeholder="Search posts..."
+            aria-label="Search posts"
+            aria-describedby="button-search"
+          />
+          <button class="btn btn-primary" id="button-search" type="submit">
+            <i class="fas fa-search"></i>
+            Go!
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Categories Widget -->
+  <div class="card mb-4">
+    <div class="card-header">Categories</div>
+    <div class="card-body">
+      <ul class="list-unstyled mb-0">
+        {{#each categories}}
+          <li>
+            <a
+              href="/category/{{name}}"
+              class="d-flex justify-content-between align-items-center"
+            >
+              {{name}}
+              <span class="badge bg-primary rounded-pill">{{postCount}}</span>
+            </a>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+
+  <!-- Recent Posts Widget -->
+  <div class="card mb-4">
+    <div class="card-header">Recent Posts</div>
+    <div class="card-body">
+      <ul class="list-unstyled mb-0">
+        {{#each recentPosts}}
+          <li class="mb-2">
+            <a href="/post/{{slug}}" class="d-flex align-items-center">
+              {{#if thumbnail}}
+                <img
+                  src="{{thumbnail}}"
+                  alt="{{title}}"
+                  class="me-2"
+                  style="width: 50px; height: 50px; object-fit: cover;"
+                />
+              {{/if}}
+              <span>{{truncate title 30}}</span>
+            </a>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+
+  <!-- Popular Posts Widget -->
+  <div class="card mb-4">
+    <div class="card-header">Popular Posts</div>
+    <div class="card-body">
+      <ul class="list-unstyled mb-0">
+        {{#each popularPosts}}
+          <li class="mb-2">
+            <a
+              href="/post/{{slug}}"
+              class="d-flex justify-content-between align-items-center"
+            >
+              {{truncate title 30}}
+              <span class="badge bg-success rounded-pill">{{views}} views</span>
+            </a>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+
+  <!-- Random Posts Widget -->
+  <div class="card mb-4">
+    <div class="card-header">Random Posts</div>
+    <div class="card-body">
+      <ul class="list-unstyled mb-0">
+        {{#each randomPosts}}
+          <li class="mb-2">
+            <a href="/post/{{slug}}" class="d-flex align-items-center">
+              {{#if thumbnail}}
+                <img
+                  src="{{thumbnail}}"
+                  alt="{{title}}"
+                  class="me-2"
+                  style="width: 50px; height: 50px; object-fit: cover;"
+                />
+              {{/if}}
+              <span>{{truncate title 30}}</span>
+            </a>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+
+  <!-- User Stats Widget (Logged-in Users) -->
+  {{#if currentUser}}
+    <div class="card mb-4">
+      <div class="card-header">Your Stats</div>
+      <div class="card-body">
+        <ul class="list-unstyled mb-0">
+          <li class="mb-2">
+            <i class="fas fa-file-alt me-2"></i>
+            Posts:
+            {{userStats.postCount}}
+          </li>
+          <li class="mb-2">
+            <i class="fas fa-eye me-2"></i>
+            Total Views:
+            {{userStats.totalViews}}
+          </li>
+          <li>
+            <i class="fas fa-comments me-2"></i>
+            Comments:
+            {{userStats.commentCount}}
+          </li>
+        </ul>
+      </div>
+    </div>
+  {{else}}
+    <!-- Call-to-Action Widget (Unauthenticated Users) -->
+    <div class="card mb-4">
+      <div class="card-header">Join Our Community</div>
+      <div class="card-body text-center">
+        <p class="mb-3">Sign up to share your stories and connect with others!</p>
+        <a href="/register" class="btn btn-primary">Register Now</a>
+      </div>
+    </div>
+  {{/if}}
+</div>

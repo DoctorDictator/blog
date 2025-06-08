@@ -1,0 +1,2 @@
+MONGO_URI=mongodb+srv://myuser:u3YDevNuBOD0MLVB@cluster0.rojgfzb.mongodb.net/blog?retryWrites=true&w=majority
+SECRET_KEY=your-secret-key

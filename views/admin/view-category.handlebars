@@ -1,0 +1,81 @@
+<div id="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">All Categories</h1>
+        <p class="mb-4">Manage all categories created in the system.</p>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Categories</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                {{!-- <th>Created By</th> --}}
+                                <th>Created At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each categories}}
+                            <tr>
+                                <td>{{this.name}}</td>
+                                {{!-- <td>{{this.createdBy.firstName}} {{this.createdBy.lastName}}</td> --}}
+                                <td>{{formatDate this.createdAt 'YYYY-MM-DD'}}</td>
+                                <td>
+                                    <a href="/admin/category/edit-category/{{this._id}}" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Edit</a>
+                                    <form action="/admin/category/delete-category/{{this._id}}" method="POST" style="display:inline;">
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this category?');"><i class="fas fa-trash"></i> Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- End of Main Content -->
+
+<!-- DataTables Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true
+        });
+    });
+</script>
+<!-- Custom Handlebars helper for date formatting -->
+<script>
+Handlebars.registerHelper('formatDate', function(date, format) {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return format.replace('YYYY', year).replace('MM', month).replace('DD', day);
+});
+</script>
+<style>
+    .table-responsive {
+        margin-bottom: 1.5rem;
+    }
+    .table th, .table td {
+        vertical-align: middle;
+    }
+    .btn-sm {
+        margin-right: 5px;
+    }
+</style>

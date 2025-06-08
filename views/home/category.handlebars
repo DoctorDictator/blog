@@ -1,0 +1,81 @@
+<div class="col-lg-8">
+    <h2 class="mb-4">Posts in {{category.name}}</h2>
+    <div class="row" id="post-container">
+        {{#each posts}}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <a href="/post/{{slug}}">
+                        {{#if thumbnail}}
+                            <img src="/Uploads/{{thumbnail}}" class="card-img-top" alt="{{title}}">
+                        {{else}}
+                            <img src="https://dummyimage.com/600x300/dee2e6/6c757d.jpg" class="card-img-top" alt="{{title}}">
+                        {{/if}}
+                    </a>
+                    <div class="card-body">
+                        <div class="small text-muted">
+                            {{formatDate createdAt "MMMM D, YYYY"}} | 
+                            By <a href="/user/{{author.username}}">{{author.firstName}} {{author.lastName}}</a>
+                        </div>
+                        <h5 class="card-title">{{title}}</h5>
+                        <p class="card-text">{{truncate content 150}}</p>
+                        <a href="/post/{{slug}}" class="btn btn-primary btn-sm">Read more →</a>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+    <div id="loading" style="text-align:center; display:none;">Loading more posts...</div>
+</div>
+
+<script>
+    let currentPage = {{currentPage}};
+    const totalPages = {{totalPages}};
+    let loading = false;
+
+    window.addEventListener('scroll', () => {
+        if (loading) return;
+        if (currentPage >= totalPages) return;
+
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+            loading = true;
+            document.getElementById('loading').style.display = 'block';
+
+            fetch(`/api/category/{{category.name}}/posts?page=${currentPage + 1}`)
+                .then(res => res.json())
+                .then(posts => {
+                    const container = document.getElementById('post-container');
+                    posts.forEach(post => {
+                        const thumbnail = post.thumbnail ? `/Uploads/${post.thumbnail}` : 'https://dummyimage.com/600x300/dee2e6/6c757d.jpg';
+                        const postHTML = `
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <a href="/post/${post.slug}">
+                                        <img class="card-img-top" src="${thumbnail}" alt="${post.title}" />
+                                    </a>
+                                    <div class="card-body">
+                                        <div class="small text-muted">
+                                            ${new Date(post.createdAt).toLocaleDateString()} | 
+                                            By <a href="/user/${post.author.username}">${post.author.firstName} ${post.author.lastName}</a>
+                                        </div>
+                                        <h5 class="card-title">${post.title}</h5>
+                                        <p class="card-text">${post.content.length > 150 ? post.content.substring(0,150) + '...' : post.content}</p>
+                                        <a class="btn btn-primary btn-sm" href="/post/${post.slug}">Read more →</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        container.insertAdjacentHTML('beforeend', postHTML);
+                    });
+
+                    currentPage++;
+                    loading = false;
+                    document.getElementById('loading').style.display = 'none';
+                })
+                .catch(err => {
+                    console.error('Error loading posts:', err);
+                    loading = false;
+                    document.getElementById('loading').style.display = 'none';
+                });
+        }
+    });
+</script>

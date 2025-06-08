@@ -1,0 +1,24 @@
+       {{> home/navigation}}
+       
+        <!-- Page header with logo and tagline-->
+        <header class="py-5 bg-light border-bottom mb-4">
+            <div class="container">
+                <div class="text-center my-5">
+                    <h1 class="fw-bolder">Full-Stack Blog Platform with User Authentication and Admin Dashboard</h1>
+                    <p class="lead mb-0">Built a Node.js and MongoDB-powered blog platform with secure user authentication (bcrypt, JWT) and a responsive Bootstrap 5 front-end. Implemented an admin dashboard with real-time analytics and dynamic sidebar widgets for enhanced user engagement. Demonstrated RESTful API design, database modeling, and scalable web development.</p>
+                </div>
+            </div>
+        </header>
+        <!-- Page content-->
+        <div class="container">
+            <div class="row">
+                <!-- Blog entries-->
+                {{{ body }}}
+                <!-- Side widgets-->
+
+                {{> home/sidebar}}
+                
+            </div>
+        </div>
+        <!-- Footer-->
+        {{> home/footer}}

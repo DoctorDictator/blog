@@ -1,0 +1,230 @@
+<div id="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <h1 class="h3 mb-4 text-gray-800">Messages</h1>
+        <div class="row" style="height: calc(100vh - 150px);">
+            <!-- Left Side: Chat Messages -->
+            <div class="col-lg-8" style="height: 100%;">
+                <div class="card shadow h-100">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Chat with Selected User</h6>
+                    </div>
+                    <div class="card-body d-flex flex-column" style="height: 100%;">
+                        <!-- Messages Area -->
+                        <div class="chat-messages mb-4" style="flex-grow: 1; overflow-y: auto;">
+                            <div class="message mb-2">
+                                <div class="card p-2 bg-light">
+                                    <small>Other User (2025-05-29 09:00 AM)</small>
+                                    <p class="mb-0">Hey, how's it going?</p>
+                                    <small class="text-muted">Seen</small>
+                                </div>
+                            </div>
+                            <div class="message mb-2 text-right">
+                                <div class="card p-2 bg-primary text-white">
+                                    <small>You (2025-05-29 09:05 AM)</small>
+                                    <p class="mb-0">Pretty good, thanks!</p>
+                                    <small>Sent</small>
+                                </div>
+                            </div>
+                            <div class="message mb-2">
+                                <div class="card p-2 bg-light">
+                                    <small>Other User (2025-05-29 09:10 AM)</small>
+                                    <p class="mb-0">Got any plans for the weekend?</p>
+                                    <small class="text-muted">Seen</small>
+                                </div>
+                            </div>
+                            <div class="message mb-2 text-right">
+                                <div class="card p-2 bg-primary text-white">
+                                    <small>You (2025-05-29 09:15 AM)</small>
+                                    <p class="mb-0">Maybe hiking, you?</p>
+                                    <small>Sent</small>
+                                </div>
+                            </div>
+                            <div class="message mb-2">
+                                <div class="card p-2 bg-light">
+                                    <small>Other User (2025-05-29 09:20 AM)</small>
+                                    <p class="mb-0">Nice! I'm thinking of catching a movie.</p>
+                                    <small class="text-muted">Seen</small>
+                                </div>
+                            </div>
+                            <div class="message mb-2 text-right">
+                                <div class="card p-2 bg-primary text-white">
+                                    <small>You (2025-05-29 09:25 AM)</small>
+                                    <p class="mb-0">Cool, which one?</p>
+                                    <small>Sent</small>
+                                </div>
+                            </div>
+                            <div class="message mb-2">
+                                <div class="card p-2 bg-light">
+                                    <small>Other User (2025-05-29 09:30 AM)</small>
+                                    <p class="mb-0">Not sure yet, any recommendations?</p>
+                                    <small class="text-muted">Seen</small>
+                                </div>
+                            </div>
+                            <div class="message mb-2 text-right">
+                                <div class="card p-2 bg-primary text-white">
+                                    <small>You (2025-05-29 09:35 AM)</small>
+                                    <p class="mb-0">Check out the new sci-fi flick, heard it's great!</p>
+                                    <small>Sent</small>
+                                </div>
+                            </div>
+                            <div class="message mb-2">
+                                <div class="card p-2 bg-light">
+                                    <small>Other User (2025-05-29 09:40 AM)</small>
+                                    <p class="mb-0">Sounds good, I'll look into it!</p>
+                                    <small class="text-muted">Seen</small>
+                                </div>
+                            </div>
+                            <div class="message mb-2 text-right">
+                                <div class="card p-2 bg-primary text-white">
+                                    <small>You (2025-05-29 09:45 AM)</small>
+                                    <p class="mb-0">Let me know how it is!</p>
+                                    <small>Sent</small>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Message Input Form -->
+                        <form action="/admin/messages/send" method="POST">
+                            <input type="hidden" name="conversationId" value="1">
+                            <div class="form-group">
+                                <textarea class="form-control" name="content" rows="3" placeholder="Type your message..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Send
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Right Side: Conversations List -->
+            <div class="col-lg-4" style="height: 100%;">
+                <div class="card shadow h-100">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Conversations</h6>
+                    </div>
+                    <div class="card-body p-0" style="overflow-y: auto;">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a href="/admin/messages?conv=1" class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>User Name</strong>
+                                        <p class="mb-0 text-truncate" style="max-width: 200px;">Recent message preview...</p>
+                                    </div>
+                                    <span class="badge badge-primary">Sent</span>
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="/admin/messages?conv=2" class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>Another User</strong>
+                                        <p class="mb-0 text-truncate" style="max-width: 200px;">Another message...</p>
+                                    </div>
+                                    <span class="badge badge-success">Seen</span>
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="/admin/messages?conv=3" class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>User Three</strong>
+                                        <p class="mb-0 text-truncate" style="max-width: 200px;">How's it going?</p>
+                                    </div>
+                                    <span class="badge badge-primary">Sent</span>
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="/admin/messages?conv=4" class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>User Four</strong>
+                                        <p class="mb-0 text-truncate" style="max-width: 200px;">Meeting tomorrow?</p>
+                                    </div>
+                                    <span class="badge badge-success">Seen</span>
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="/admin/messages?conv=5" class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>User Five</strong>
+                                        <p class="mb-0 text-truncate" style="max-width: 200px;">Check this out!</p>
+                                    </div>
+                                    <span class="badge badge-primary">Sent</span>
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="/admin/messages?conv=6" class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>User Six</strong>
+                                        <p class="mb-0 text-truncate" style="max-width: 200px;">Great work!</p>
+                                    </div>
+                                    <span class="badge badge-success">Seen</span>
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="/admin/messages?conv=7" class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>User Seven</strong>
+                                        <p class="mb-0 text-truncate" style="max-width: 200px;">Let's discuss...</p>
+                                    </div>
+                                    <span class="badge badge-primary">Sent</span>
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="/admin/messages?conv=8" class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>User Eight</strong>
+                                        <p class="mb-0 text-truncate" style="max-width: 200px;">Follow-up needed.</p>
+                                    </div>
+                                    <span class="badge badge-success">Seen</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- End of Main Content -->
+
+<style>
+    /* Custom styles for the messages page */
+    .list-group-item a {
+        color: #333;
+        text-decoration: none;
+    }
+
+    .list-group-item a:hover {
+        background-color: #f8f9fc;
+    }
+
+    .chat-messages .message .card {
+        max-width: 70%;
+        border-radius: 0.35rem;
+    }
+
+    .chat-messages .text-right .card {
+        margin-left: auto;
+    }
+
+    .form-control {
+        border-radius: 0.35rem;
+    }
+
+    .btn-primary {
+        border-radius: 0.35rem;
+    }
+
+    .badge {
+        font-size: 0.75rem;
+    }
+
+    /* Ensure chat and conversations columns fill screen height */
+    .chat-messages {
+        flex-grow: 1;
+    }
+
+    .card-body {
+        padding-bottom: 0;
+    }
+</style>

@@ -1,0 +1,59 @@
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">All Posts</h1>
+    <p class="mb-4">View and manage all posts in the system.</p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Posts</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Date Created</th>
+                            <th>Views</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                   
+                    <tbody>
+                        {{#each posts}}
+                        <tr>
+                            <td>{{this.title}}</td>
+                            <td>{{this.author.firstName}} {{this.author.lastName}}</td>
+                            <td>{{this.category.name}}</td>
+                            <td>{{this.status}}</td>
+                            <td>{{formatDate this.createdAt 'YYYY-MM-DD'}}</td>
+                            <td>{{this.views}}</td>
+                            <td>
+                                <a href="/admin/posts/edit-posts/{{this.slug}}" class="btn btn-sm btn-primary">Edit</a>
+                                <form action="/admin/posts/delete-posts/{{this.slug}}?_method=DELETE" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this post?');">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Handlebars helper for date formatting -->
+<script>
+Handlebars.registerHelper('formatDate', function(date, format) {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return format.replace('YYYY', year).replace('MM', month).replace('DD', day);
+});
+</script>

@@ -1,0 +1,132 @@
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Create New Post</h1>
+    <p class="mb-4">Fill out the form below to create a new post.</p>
+
+    <!-- Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Post Details</h6>
+        </div>
+        <div class="card-body">
+            <form action="/admin/posts/create-posts" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <select class="form-control" id="author" name="author" required>
+                        {{#each authors}}
+                            <option value="{{this._id}}">{{this.firstName}} {{this.lastName}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select class="form-control" id="category" name="category" required>
+                        {{#each categories}}
+                            <option value="{{this._id}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select class="form-control" id="status" name="status">
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <div id="content-editor"></div>
+                    <input type="hidden" id="content" name="content" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="thumbnail">Thumbnail</label>
+                    <input type="file" class="form-control-file" id="thumbnail" name="thumbnail" accept="image/*">
+                </div>
+
+                <div class="form-group">
+                    <label for="tags">Tags (comma-separated)</label>
+                    <input type="text" class="form-control" id="tags" name="tags" placeholder="e.g., tech, news, tutorial">
+                </div>
+
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="allowComments" name="allowComments">
+                    <label class="form-check-label" for="allowComments">Allow Comments</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Create Post</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#content-editor'), {
+            toolbar: [
+                'heading', '|',
+                'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+                'outdent', 'indent', '|',
+                'blockQuote', 'insertTable', 'mediaEmbed', 'undo', 'redo', '|',
+                'fontSize', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
+                'alignment', 'code', 'codeBlock'
+            ],
+            heading: {
+                options: [
+                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                    { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                    { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                    { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
+                ]
+            }
+        })
+        .then(editor => {
+            editor.model.document.on('change:data', () => {
+                document.querySelector('#content').value = editor.getData();
+            });
+        })
+        .catch(error => {
+            console.error('Editor initialization failed:', error);
+        });
+</script>
+
+<style>
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    .form-control {
+        border-radius: 0.35rem;
+    }
+    .btn-primary {
+        border-radius: 0.35rem;
+        padding: 0.75rem 1.25rem;
+    }
+    .ck-editor__editable {
+        min-height: 200px;
+        border-radius: 0.35rem;
+        border: 1px solid #d1d3e2;
+        padding: 15px;
+        font-family: 'Nunito', sans-serif;
+        color: #858796;
+        background-color: #fff;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    }
+    .ck-editor__editable:focus {
+        border-color: #4e73df;
+        box-shadow: 0 0 0 0.2rem rgba(78, 105, 223, 0.25);
+    }
+    .ck-toolbar {
+        border-radius: 0.35rem 0.35rem 0 0;
+        background-color: #f8f9fc;
+        border: 1px solid #d1d3e2;
+    }
+</style>

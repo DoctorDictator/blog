@@ -1,0 +1,114 @@
+<div id="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <h1 class="h3 mb-4 text-gray-800">Edit Profile</h1>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Profile Details</h6>
+                    </div>
+                    <div class="card-body">
+                        <form action="/admin/profile/edit-profile" method="POST" enctype="multipart/form-data">
+                            <!-- Profile Picture -->
+                            <div class="form-group text-center mb-4">
+                                <label for="profilePicture">Profile Picture</label>
+                                {{#if user.profilePicture}}
+                                    <div>
+                                        <img src="/Uploads/{{user.profilePicture}}" alt="Current Profile Picture" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover; margin-bottom: 10px;">
+                                        <p>Current Picture: {{user.profilePicture}}</p>
+                                    </div>
+                                {{else}}
+                                    <p>No profile picture uploaded</p>
+                                {{/if}}
+                                <input type="file" class="form-control-file" id="profilePicture" name="profilePicture" accept="image/*">
+                            </div>
+                            <!-- Basic Info -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="firstName">First Name</label>
+                                        <input type="text" class="form-control" id="firstName" name="firstName" value="{{user.firstName}}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="lastName">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" name="lastName" value="{{user.lastName}}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username">Username</label>
+                                        <input type="text" class="form-control" id="username" name="username" value="{{user.username}}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email" value="{{user.email}}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="position">Position</label>
+                                        <input type="text" class="form-control" id="position" name="position" value="{{user.position}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="phone">Phone</label>
+                                        <input type="text" class="form-control" id="phone" name="phone" value="{{user.phone}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="street">Street</label>
+                                        <input type="text" class="form-control" id="street" name="street" value="{{user.address.street}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="city">City</label>
+                                        <input type="text" class="form-control" id="city" name="city" value="{{user.address.city}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="state">State</label>
+                                        <input type="text" class="form-control" id="state" name="state" value="{{user.address.state}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="postalCode">Postal Code</label>
+                                        <input type="text" class="form-control" id="postalCode" name="postalCode" value="{{user.address.postalCode}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="country">Country</label>
+                                        <input type="text" class="form-control" id="country" name="country" value="{{user.address.country}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Bio -->
+                            <div class="form-group">
+                                <label for="bio">Bio</label>
+                                <textarea class="form-control" id="bio" name="bio" rows="4">{{user.bio}}</textarea>
+                            </div>
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Update Profile
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- End of Main Content -->
+
+<style>
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    .form-control {
+        border-radius: 0.35rem;
+    }
+    .btn-primary {
+        border-radius: 0.35rem;
+        padding: 0.75rem 1.25rem;
+    }
+    .rounded-circle {
+        border: 2px solid #d1d3e2;
+    }
+    .font-weight-bold {
+        color: #4e73df;
+    }
+</style>

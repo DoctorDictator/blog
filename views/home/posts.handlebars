@@ -1,0 +1,99 @@
+<div class="col-lg-8">
+    <article>
+        <h1 class="mb-3">{{post.title}}</h1>
+        <p class="text-muted">
+            By <a href="/user/{{post.author.username}}">{{post.author.firstName}} {{post.author.lastName}}</a> |
+            In <a href="/category/{{post.category.name}}">{{post.category.name}}</a> |
+            {{formatDate post.createdAt "MMMM Do YYYY"}}
+        </p>
+
+        {{#if post.thumbnail}}
+            <img src="/Uploads/{{post.thumbnail}}" class="img-fluid mb-4" alt="Post thumbnail" style="width: 100%;">
+        {{/if}}
+
+        <div class="mb-4">
+            {{{post.content}}}
+        </div>
+
+        {{#if post.tags.length}}
+            <p><strong>Tags:</strong>
+                {{#each post.tags}}
+                    <span class="badge bg-secondary">{{this}}</span>
+                {{/each}}
+            </p>
+        {{/if}}
+
+        <p><strong>Views:</strong> {{post.views}}</p>
+    </article>
+
+    <hr>
+
+    <!-- Comments Section -->
+    <section>
+        <h4>Comments ({{post.comments.length}})</h4>
+
+        {{#if post.comments.length}}
+            {{#each post.comments}}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            {{#if author}}
+                                <a href="/user/{{author.username}}">{{author.firstName}} {{author.lastName}}</a>
+                            {{else}}
+                                Anonymous
+                            {{/if}}
+                        </h6>
+                        <p class="card-text">{{content}}</p>
+                        <small class="text-muted">{{formatDate createdAt "MMM Do YYYY, h:mm a"}}</small>
+
+                        {{#if ../currentUser}}
+                            <form action="/comment/{{_id}}/reply" method="POST" class="mt-2">
+                                <div class="mb-2">
+                                    <textarea class="form-control" name="content" rows="2" placeholder="Add a reply..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm">Reply</button>
+                            </form>
+                        {{/if}}
+
+                        {{#if replies.length}}
+                            <div class="mt-3 ps-3 border-start">
+                                <h6>Replies:</h6>
+                                {{#each replies}}
+                                    <p class="mb-1">
+                                        <strong>
+                                            {{#if author}}
+                                                <a href="/user/{{author.username}}">{{author.firstName}} {{author.lastName}}</a>
+                                            {{else}}
+                                                Anonymous
+                                            {{/if}}
+                                        </strong> - 
+                                        {{this.content}} 
+                                        <small class="text-muted">({{formatDate this.createdAt "MMM Do YYYY, h:mm a"}})</small>
+                                    </p>
+                                {{/each}}
+                            </div>
+                        {{/if}}
+                    </div>
+                </div>
+            {{/each}}
+        {{else}}
+            <p>No comments yet.</p>
+        {{/if}}
+
+        {{#if post.allowComments}}
+            {{#if currentUser}}
+                <form action="/comment/{{post._id}}" method="POST">
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Add a Comment</label>
+                        <textarea class="form-control" name="content" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            {{else}}
+                <p class="text-muted">Please log in to add a comment.</p>
+            {{/if}}
+        {{else}}
+            <p class="text-muted">Comments are disabled for this post.</p>
+        {{/if}}
+    </section>
+</div>
