@@ -1,4 +1,4 @@
-require("dotenv").config();
+require('dotenv').config();
 
 const express = require("express");
 const path = require("path");
@@ -29,15 +29,13 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-      mongoUrl:
-        process.env.MONGO_URI ||
-        "mongodb+srv://myuser:u3YDevNuBOD0MLVB@cluster0.rojgfzb.mongodb.net/blog?retryWrites=true&w=majority",
+      mongoUrl: process.env.MONGO_URI || "mongodb+srv://myuser:u3YDevNuBOD0MLVB@cluster0.rojgfzb.mongodb.net/blog?retryWrites=true&w=majority&tls=true&tlsInsecure=false",
       collectionName: "sessions",
-      ttl: 24 * 60 * 60, // 1 day in seconds
+      ttl: 24 * 60 * 60,
     }),
     cookie: {
-      secure: false, // Set to true for HTTPS in production
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000,
     },
   })
 );
@@ -54,10 +52,7 @@ app.use(async (req, res, next) => {
   console.log("Session before auto-login:", req.session);
   if (!req.session.user && req.cookies.rememberMe) {
     try {
-      const decoded = jwt.verify(
-        req.cookies.rememberMe,
-        process.env.SECRET_KEY || "your-secret-key"
-      );
+      const decoded = jwt.verify(req.cookies.rememberMe, process.env.SECRET_KEY || "your-secret-key");
       const user = await require("./models/User").findById(decoded.userId);
       if (user) {
         req.session.user = {
@@ -82,23 +77,27 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// Connect to MongoDB Atlas
-mongoose
-  .connect(
-    process.env.MONGO_URI ||
-      "mongodb+srv://myuser:u3YDevNuBOD0MLVB@cluster0.rojgfzb.mongodb.net/blog?retryWrites=true&w=majority"
-  )
-  .then(() => console.log("Database connected successfully"))
-  .catch((err) => console.error("Database connection error:", err));
+// Connect to MongoDB Atlas with retry logic
+const connectWithRetry = () => {
+  mongoose.connect(
+    process.env.MONGO_URI || "mongodb+srv://myuser:u3YDevNuBOD0MLVB@cluster0.rojgfzb.mongodb.net/blog?retryWrites=true&w=majority&tls=true&tlsInsecure=false",
+    {
+      serverSelectionTimeoutMS: 5000, // Reduce timeout for faster retries
+      heartbeatFrequencyMS: 10000,
+    }
+  ).then(() => console.log("Database connected successfully"))
+   .catch((err) => {
+     console.error("MongoDB connection error:", err.message);
+     setTimeout(connectWithRetry, 5000); // Retry after 5 seconds
+   });
+};
+connectWithRetry();
 
 // Test MongoDB connection route
-app.get("/test-mongo", async (req, res) => {
+app.get('/test-mongo', async (req, res) => {
   try {
     const User = require("./models/User");
-    await User.create({
-      username: "testuser",
-      email: `test${Date.now()}@example.com`,
-    });
+    await User.create({ username: "testuser", email: `test${Date.now()}@example.com` });
     res.send("MongoDB connection works! User added.");
   } catch (err) {
     res.status(500).send(`MongoDB error: ${err.message}`);
