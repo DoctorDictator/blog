@@ -43,8 +43,7 @@
 
                 <div class="form-group">
                     <label for="content">Content</label>
-                    <div id="content-editor"></div>
-                    <input type="hidden" id="content" name="content" required>
+                    <input type="texxt" class="form-control" tags="content" id="content" name="content" required>
                 </div>
 
                 <div class="form-group">
@@ -68,65 +67,3 @@
     </div>
 </div>
 
-<script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
-<script>
-    ClassicEditor
-        .create(document.querySelector('#content-editor'), {
-            toolbar: [
-                'heading', '|',
-                'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
-                'outdent', 'indent', '|',
-                'blockQuote', 'insertTable', 'mediaEmbed', 'undo', 'redo', '|',
-                'fontSize', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
-                'alignment', 'code', 'codeBlock'
-            ],
-            heading: {
-                options: [
-                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                    { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                    { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                    { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
-                ]
-            }
-        })
-        .then(editor => {
-            editor.model.document.on('change:data', () => {
-                document.querySelector('#content').value = editor.getData();
-            });
-        })
-        .catch(error => {
-            console.error('Editor initialization failed:', error);
-        });
-</script>
-
-<style>
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-    .form-control {
-        border-radius: 0.35rem;
-    }
-    .btn-primary {
-        border-radius: 0.35rem;
-        padding: 0.75rem 1.25rem;
-    }
-    .ck-editor__editable {
-        min-height: 200px;
-        border-radius: 0.35rem;
-        border: 1px solid #d1d3e2;
-        padding: 15px;
-        font-family: 'Nunito', sans-serif;
-        color: #858796;
-        background-color: #fff;
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    }
-    .ck-editor__editable:focus {
-        border-color: #4e73df;
-        box-shadow: 0 0 0 0.2rem rgba(78, 105, 223, 0.25);
-    }
-    .ck-toolbar {
-        border-radius: 0.35rem 0.35rem 0 0;
-        background-color: #f8f9fc;
-        border: 1px solid #d1d3e2;
-    }
-</style>
