@@ -10,10 +10,13 @@ const Category = require('../../models/Category');
 // Configure Multer for file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, '..','..','uploads'));
+        const uploadDir = path.join(__dirname, '..', '..', 'uploads');
+        if (!require('fs').existsSync(uploadDir)) {
+            require('fs').mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
-        // Generate a 10-digit unique number
         const uniqueNumber = Math.floor(1000000000 + Math.random() * 9000000000);
         cb(null, `${uniqueNumber}${path.extname(file.originalname)}`);
     }
@@ -81,15 +84,23 @@ router.post('/create-posts', fetchFullUser, upload.single('thumbnail'), async (r
     const { title, author, status, category, content, tags, allowComments } = req.body;
 
     try {
-        let slug = slugify(title, { lower: true, strict: true });
+        if (!content || content.trim() === '') {
+            console.error('Content missing:', req.body);
+            return res.status(400).render('admin/create-posts', {
+                layout: 'admin',
+                error: 'Content is required',
+                authors: await User.find(),
+                categories: await Category.find(),
+                user: req.fullUser
+            });
+        }
 
-        // Ensure slug uniqueness
+        let slug = slugify(title, { lower: true, strict: true });
         let existingPost = await Post.findOne({ slug });
         if (existingPost) {
             slug = `${slug}-${Date.now()}`;
         }
 
-        // Handle tags
         const tagsArray = tags ? tags.split(',').map(tag => tag.trim()) : [];
 
         const newPost = new Post({
@@ -110,7 +121,13 @@ router.post('/create-posts', fetchFullUser, upload.single('thumbnail'), async (r
         res.redirect('/admin/posts/view-posts');
     } catch (err) {
         console.error(err);
-        res.redirect('/admin/posts/create-posts');
+        res.status(500).render('admin/create-posts', {
+            layout: 'admin',
+            error: 'Failed to create post',
+            authors: await User.find(),
+            categories: await Category.find(),
+            user: req.fullUser
+        });
     }
 });
 
@@ -152,7 +169,18 @@ router.post('/edit-posts/:slug', fetchFullUser, upload.single('thumbnail'), asyn
             return res.status(404).send('Post not found');
         }
 
-        // Update slug if title changed
+        if (!content || content.trim() === '') {
+            console.error('Content missing:', req.body);
+            return res.status(400).render('admin/edit-posts', {
+                layout: 'admin',
+                error: 'Content is required',
+                post,
+                authors: await User.find(),
+                categories: await Category.find(),
+                user: req.fullUser
+            });
+        }
+
         if (title !== post.title) {
             let newSlug = slugify(title, { lower: true, strict: true });
             let existing = await Post.findOne({ slug: newSlug });
@@ -164,7 +192,6 @@ router.post('/edit-posts/:slug', fetchFullUser, upload.single('thumbnail'), asyn
             post.slug = newSlug;
         }
 
-        // Handle tags
         const tagsArray = tags ? tags.split(',').map(tag => tag.trim()) : [];
 
         post.title = title;
@@ -181,7 +208,14 @@ router.post('/edit-posts/:slug', fetchFullUser, upload.single('thumbnail'), asyn
         res.redirect('/admin/posts/view-posts');
     } catch (err) {
         console.error(err);
-        res.redirect('/admin/posts/view-posts');
+        res.status(500).render('admin/edit-posts', {
+            layout: 'admin',
+            error: 'Failed to update post',
+            post,
+            authors: await User.find(),
+            categories: await Category.find(),
+            user: req.fullUser
+        });
     }
 });
 
