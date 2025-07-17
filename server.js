@@ -96,19 +96,6 @@ const connectWithRetry = () => {
 };
 connectWithRetry();
 
-// Test MongoDB connection route
-app.get("/test-mongo", async (req, res) => {
-  try {
-    const User = require("./models/User");
-    await User.create({
-      username: "testuser",
-      email: `test${Date.now()}@example.com`,
-    });
-    res.send("MongoDB connection works! User added.");
-  } catch (err) {
-    res.status(500).send(`MongoDB error: ${err.message}`);
-  }
-});
 
 app.use(methodOverride("_method"));
 app.use(bodyParser.json());
